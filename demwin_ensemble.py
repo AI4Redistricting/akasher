@@ -147,21 +147,49 @@ for part in our_random_walk:
     eg_pres = efficiency_gap(part, "dem_pres_votes", "rep_pres_votes")
     mm_diff_sen = mean_median(part, "dem_sen_votes", "rep_sen_votes")
     eg_sen = efficiency_gap(part, "dem_sen_votes", "rep_sen_votes")
-
+    
+    mean_median_diff_pres.append(mm_diff_pres)
+    efficiency_gap_pres.append(eg_pres)
+    mean_median_diff_sen.append(mm_diff_sen)
+    efficiency_gap_sen.append(eg_sen)
 
 #draws the histograms
 plt.figure()
-plt.hist(cutedge_ensemble, align = 'left')
+plt.hist(cutedge_ensemble, align='left')
+plt.title('Cut Edges')
 plt.show()
 
 plt.figure()
 plt.hist(pres_demwin_ensemble, align='left')
+plt.title('Presidential Elections Won by Democrats')
 plt.show()
 
 plt.figure()
 plt.hist(sen_demwin_ensemble, align='left')
+plt.title('Senate Elections Won by Democrats')
 plt.show()
-    
+
+plt.figure()
+plt.hist(mean_median_diff_pres, align='left')
+plt.title("Mean-Median Difference for Presidential Election")
+plt.show()
+
+plt.figure()
+plt.hist(efficiency_gap_pres, align='left')
+plt.title("Efficiency Gap for Presidential Election")
+plt.show()
+
+plt.figure()
+plt.hist(mean_median_diff_sen, align='left')
+plt.title("Mean-Median Difference for Senate Election")
+plt.show()
+
+plt.figure()
+plt.hist(efficiency_gap_sen, align='left')
+plt.title("Efficiency Gap for Senate Election")
+plt.show()
+
+   
 print('CUTEDGE:')
 print(cutedge_ensemble)
 print('PRESDEMWIN:')

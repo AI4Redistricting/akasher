@@ -21,7 +21,7 @@ from gerrychain.accept import always_accept
 from functools import partial
 import time
 import random
-
+import numpy as np
 
 start_time = time.time()
 
@@ -88,6 +88,22 @@ mean_median_diff_pres = []
 efficiency_gap_pres = []
 mean_median_diff_sen = []
 efficiency_gap_sen = []
+
+
+def mean_median(partition, dem_key, rep_key):
+    # Counts the democratic and republican votes for each district
+    dem_votes = [partition[dem_key][i + 1] for i in range(num_dist)]
+    rep_votes = [partition[rep_key][i + 1] for i in range(num_dist)]
+    
+    # Calculates the vote share for the Democratic party where total votes are non-zero
+    vote_shares = [d / (d + r) for d, r in zip(dem_votes, rep_votes) if d + r > 0]
+    
+    # Calculates the median and mean of these Democratic vote shares
+    median = np.median(vote_shares)
+    mean = np.mean(vote_shares)
+    
+    # Returns the difference between the median and the mean vote share
+    return median - mean
 
 #runs the markov chain
 for part in our_random_walk:

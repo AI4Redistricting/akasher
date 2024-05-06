@@ -127,21 +127,27 @@ def efficiency_gap(partition, dem_key, rep_key):
     # Calculates and return the efficiency gap, which is normalized by the total votes
     return (wasted_r - wasted_d) / sum(partition[dem_key].values() + partition[rep_key].values())
 
-#runs the markov chain
+# Iterates over the partitions generated in the Markov chain
 for part in our_random_walk:
     cutedge_ensemble.append(len(part["cut_edges"]))
-    
-    num_dem_win = 0
+    # Counts the number of districts won by Democrats in presidential and senatorial elections
+    num_dem_win_sen = 0
+    num_dem_win_pres = 0
     for i in range(num_dist):
         if(part["dem_pres_votes"][i+1] > part["rep_pres_votes"][i+1]):
-            num_dem_win += 1
-    pres_demwin_ensemble.append(num_dem_win)
-    
-    num_dem_win = 0
+            num_dem_win_pres  += 1
     for i in range(num_dist):
         if(part["dem_sen_votes"][i+1] > part["rep_sen_votes"][i+1]):
-            num_dem_win += 1
-    sen_demwin_ensemble.append(num_dem_win)
+            num_dem_win_sen += 1
+    # Appends the counts to respective lists
+    sen_demwin_ensemble.append(num_dem_win_sen)
+    pres_demwin_ensemble.append(num_dem_win_pres)
+    # Calculates and tracks the mean-median difference and efficiency gap for both elections
+    mm_diff_pres = mean_median(part, "dem_pres_votes", "rep_pres_votes")
+    eg_pres = efficiency_gap(part, "dem_pres_votes", "rep_pres_votes")
+    mm_diff_sen = mean_median(part, "dem_sen_votes", "rep_sen_votes")
+    eg_sen = efficiency_gap(part, "dem_sen_votes", "rep_sen_votes")
+
 
 #draws the histograms
 plt.figure()

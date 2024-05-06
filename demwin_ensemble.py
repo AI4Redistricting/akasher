@@ -22,6 +22,7 @@ from functools import partial
 import time
 import random
 import numpy as np
+import pandas as pd
 
 start_time = time.time()
 
@@ -187,13 +188,17 @@ plt.hist(efficiency_gap_sen, align='left')
 plt.title("Efficiency Gap for Senate Election")
 plt.show()
 
+col_names = {'cutedge_ensemble': cutedge_ensemble, 
+             'pres_demwin_ensemble': pres_demwin_ensemble,
+             'sen_demwin_ensemble': sen_demwin_ensemble,
+             'mean_median_diff_pres': mean_median_diff_pres,
+             'mean_median_diff_sen':mean_median_diff_sen,
+             'efficiency_gap_pres': mean_median_diff_pres,
+             'efficiency_gap_sen': efficiency_gap_sen}
 
-print('CUTEDGE:')
-print(cutedge_ensemble)
-print('PRESDEMWIN:')
-print(pres_demwin_ensemble)
-print("SENDEMWIN:")
-print(sen_demwin_ensemble)
+ensembles = pd.DataFrame(col_names)
+
+ensembles.to_csv('ensembles.csv')
 
 #takes like 100-110 minutes
 end_time = time.time()

@@ -21,7 +21,7 @@ from gerrychain.accept import always_accept
 from functools import partial
 import time
 import random
-
+import numpy as np
 
 start_time = time.time()
 
@@ -33,9 +33,6 @@ print(il_graph.nodes[0])
 #%%
 
 
-"""
-DONE: Lab 3!  See all the instructions on Canvas
-"""
 
 initial_partition = Partition(
     il_graph,
@@ -84,36 +81,113 @@ our_random_walk = MarkovChain(
 cutedge_ensemble = []
 pres_demwin_ensemble = []
 sen_demwin_ensemble = []
+mean_median_diff_pres = []
+efficiency_gap_pres = []
+mean_median_diff_sen = []
+efficiency_gap_sen = []
 
-#runs the markov chain
+
+def mean_median(partition, dem_key, rep_key):
+    # Counts the democratic and republican votes for each district
+    dem_votes = [partition[dem_key][i + 1] for i in range(num_dist)]
+    rep_votes = [partition[rep_key][i + 1] for i in range(num_dist)]
+    
+    # Calculates the vote share for the Democratic party where total votes are non-zero
+    vote_shares = [d / (d + r) for d, r in zip(dem_votes, rep_votes) if d + r > 0]
+    
+    # Calculates the median and mean of these Democratic vote shares
+    median = np.median(vote_shares)
+    mean = np.mean(vote_shares)
+    
+    # Returns the difference between the median and the mean vote share
+    return median - mean
+
+
+def efficiency_gap(partition, dem_key, rep_key):
+    wasted_d = 0  # Initializes the wasted votes for Democrats
+    wasted_r = 0  # Initializes the wasted votes for Republicans
+    
+    # Loops through each district to calculate wasted votes
+    for i in range(num_dist):
+        d_votes = partition[dem_key][i + 1]
+        r_votes = partition[rep_key][i + 1]
+        total_votes = d_votes + r_votes
+        
+        # Calculate wasted votes depending on which party won the district
+        if d_votes > r_votes:
+            wasted_d += d_votes - (total_votes / 2)  # Democrats win, calculates their wasted votes
+            wasted_r += r_votes  # All Republican votes are wasted
+        else:
+            wasted_d += d_votes  # All Democrat votes are wasted
+            wasted_r += r_votes - (total_votes / 2)  # Republicans win, calculates their wasted votes
+            
+    # Calculates and return the efficiency gap, which is normalized by the total votes
+    return (wasted_r - wasted_d) / sum(list(partition[dem_key].values()) + list(partition[rep_key].values()))
+
+
+# Iterates over the partitions generated in the Markov chain
 for part in our_random_walk:
     cutedge_ensemble.append(len(part["cut_edges"]))
-    
-    num_dem_win = 0
+    # Counts the number of districts won by Democrats in presidential and senatorial elections
+    num_dem_win_sen = 0
+    num_dem_win_pres = 0
     for i in range(num_dist):
         if(part["dem_pres_votes"][i+1] > part["rep_pres_votes"][i+1]):
-            num_dem_win += 1
-    pres_demwin_ensemble.append(num_dem_win)
-    
-    num_dem_win = 0
+            num_dem_win_pres  += 1
     for i in range(num_dist):
         if(part["dem_sen_votes"][i+1] > part["rep_sen_votes"][i+1]):
-            num_dem_win += 1
-    sen_demwin_ensemble.append(num_dem_win)
+            num_dem_win_sen += 1
+    # Appends the counts to respective lists
+    sen_demwin_ensemble.append(num_dem_win_sen)
+    pres_demwin_ensemble.append(num_dem_win_pres)
+    # Calculates and tracks the mean-median difference and efficiency gap for both elections
+    mm_diff_pres = mean_median(part, "dem_pres_votes", "rep_pres_votes")
+    eg_pres = efficiency_gap(part, "dem_pres_votes", "rep_pres_votes")
+    mm_diff_sen = mean_median(part, "dem_sen_votes", "rep_sen_votes")
+    eg_sen = efficiency_gap(part, "dem_sen_votes", "rep_sen_votes")
+    
+    mean_median_diff_pres.append(mm_diff_pres)
+    efficiency_gap_pres.append(eg_pres)
+    mean_median_diff_sen.append(mm_diff_sen)
+    efficiency_gap_sen.append(eg_sen)
 
 #draws the histograms
 plt.figure()
-plt.hist(cutedge_ensemble, align = 'left')
+plt.hist(cutedge_ensemble, align='left')
+plt.title('Cut Edges')
 plt.show()
 
 plt.figure()
 plt.hist(pres_demwin_ensemble, align='left')
+plt.title('Presidential Elections Won by Democrats')
 plt.show()
 
 plt.figure()
 plt.hist(sen_demwin_ensemble, align='left')
+plt.title('Senate Elections Won by Democrats')
 plt.show()
-    
+
+plt.figure()
+plt.hist(mean_median_diff_pres, align='left')
+plt.title("Mean-Median Difference for Presidential Election")
+plt.show()
+
+plt.figure()
+plt.hist(efficiency_gap_pres, align='left')
+plt.title("Efficiency Gap for Presidential Election")
+plt.show()
+
+plt.figure()
+plt.hist(mean_median_diff_sen, align='left')
+plt.title("Mean-Median Difference for Senate Election")
+plt.show()
+
+plt.figure()
+plt.hist(efficiency_gap_sen, align='left')
+plt.title("Efficiency Gap for Senate Election")
+plt.show()
+
+
 print('CUTEDGE:')
 print(cutedge_ensemble)
 print('PRESDEMWIN:')

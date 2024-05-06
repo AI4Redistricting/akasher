@@ -14,21 +14,21 @@ maup.progress.enabled = True
 start_time = time.time()
 population_df = gpd.read_file("./il_pl2020_b/il_pl2020_p2_b.shp")
 end_time = time.time()
-print("The time to import ak_pl2020_p2_b.shp is:",
+print("The time to import the Population shape file is:",
       (end_time-start_time)/60, "mins")
 
 #voting age population
 start_time = time.time()
 vap_df= gpd.read_file("./il_pl2020_b/il_pl2020_p4_b.shp")
 end_time = time.time()
-print("The time to import il_pl2020_p4_b.shp is:",
+print("The time to import VAP shape file is:",
       (end_time-start_time)/60, "mins")
 
 #2020 election
 start_time = time.time()
 election_df = gpd.read_file("./il_vest_20/il_vest_20.shp")
 end_time = time.time()
-print("The time to import ak_vest_20.shp is:",
+print("The time to import the 2020 VEST shape file is:",
       (end_time-start_time)/60, "mins")
 
 #congressional district data
@@ -36,7 +36,7 @@ start_time = time.time()
 district_df = gpd.read_file("./il_sldu_2021/il_sldu_2021.shp")
 end_time = time.time()
 print(district_df.geometry)
-print("The time to import ak_sldu_adopted_2022.shp is:",
+print("The time to import the Congressional District data shapefile is:",
       (end_time-start_time)/60, "mins")
 
 # Print column names from imported DataFrames 

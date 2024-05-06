@@ -1,18 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Jan 18 10:26:42 2024
-
-@author: eveomett
-
-Author: Ellen Veomett
-
-for AI for Redistricting
-
-Lab 3, spring 2024
-"""
-
-
 import matplotlib.pyplot as plt
 from gerrychain import Graph, Partition, proposals, updaters, constraints, accept, MarkovChain, Election
 from gerrychain.updaters import cut_edges, Tally

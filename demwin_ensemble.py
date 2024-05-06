@@ -28,13 +28,15 @@ start_time = time.time()
 
 random.seed(382946)
 
+# Loads the graph from the shapefile, representing Illinois's districts
 il_graph = Graph.from_file("./IL/IL.shp")
 
+# Prints the attributes of the first node (for debugging)
 print(il_graph.nodes[0])
 #%%
 
 
-
+# Initializes a partition of the graph with the updaters for the electoral data
 initial_partition = Partition(
     il_graph,
     assignment="SSD",
@@ -47,13 +49,13 @@ initial_partition = Partition(
         "rep_sen_votes": Tally("G20USSR", alias="rep_sen_votes")
     }
 )
-
+# Calculates the total population and ideal population per district
 tot_pop = sum([il_graph.nodes()[v]['TOTPOP'] for v in il_graph.nodes()])
-num_dist = 59
-ideal_pop = tot_pop/num_dist
-pop_tolerance = .1
+num_dist = 59 # Number of districts
+ideal_pop = tot_pop/num_dist # Ideal population per district
+pop_tolerance = .1  # Allowed deviation from ideal population
 
-#random walk parameters
+# Defines the parameters for the random walk proposal used in redistricting
 rw_proposal = partial(recom, ## how you choose a next districting plan
                       pop_col = "TOTPOP", ## What data describes population? 
                       pop_target = ideal_pop, ## What the target/ideal population is for each district 

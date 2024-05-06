@@ -76,7 +76,7 @@ our_random_walk = MarkovChain(
     accept = always_accept, # Accept every proposed plan that meets the population constraints
     initial_state = initial_partition, 
     #20000 times made two graphs with 2 different seeds that looked the same
-    total_steps = 50) 
+    total_steps = 50000) 
 
 #ensembles keeping track of cut edges, number of districts that are majority latino, and num of districts that dems won
 cutedge_ensemble = []

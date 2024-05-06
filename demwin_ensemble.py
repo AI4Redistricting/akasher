@@ -152,42 +152,49 @@ for part in our_random_walk:
     mean_median_diff_sen.append(mm_diff_sen)
     efficiency_gap_sen.append(eg_sen)
 
-#draws the histograms
+# Plotting the histogram of the cut edges from the ensemble analysis
 plt.figure()
 plt.hist(cutedge_ensemble, align='left')
 plt.title('Cut Edges')
 plt.show()
 
+# Plotting the histogram of the Presidential elections won by Democrats
 plt.figure()
 plt.hist(pres_demwin_ensemble, align='left')
 plt.title('Presidential Elections Won by Democrats')
 plt.show()
 
+# Plotting the histogram of the Senate elections won by Democrats
 plt.figure()
 plt.hist(sen_demwin_ensemble, align='left')
 plt.title('Senate Elections Won by Democrats')
 plt.show()
 
+# Plotting the histogram for the mean-median difference in Presidential elections
 plt.figure()
 plt.hist(mean_median_diff_pres, align='left')
 plt.title("Mean-Median Difference for Presidential Election")
 plt.show()
 
+# Plotting the histogram for the efficiency gap in Presidential elections
 plt.figure()
 plt.hist(efficiency_gap_pres, align='left')
 plt.title("Efficiency Gap for Presidential Election")
 plt.show()
 
+# Plotting the histogram for the mean-median difference in Senate elections
 plt.figure()
 plt.hist(mean_median_diff_sen, align='left')
 plt.title("Mean-Median Difference for Senate Election")
 plt.show()
 
+# Plotting the histogram for the efficiency gap in Senate elections
 plt.figure()
 plt.hist(efficiency_gap_sen, align='left')
 plt.title("Efficiency Gap for Senate Election")
 plt.show()
 
+# Creates a dictionary with ensemble analysis results
 col_names = {'cutedge_ensemble': cutedge_ensemble, 
              'pres_demwin_ensemble': pres_demwin_ensemble,
              'sen_demwin_ensemble': sen_demwin_ensemble,
@@ -196,11 +203,12 @@ col_names = {'cutedge_ensemble': cutedge_ensemble,
              'efficiency_gap_pres': mean_median_diff_pres,
              'efficiency_gap_sen': efficiency_gap_sen}
 
+# Converts the dictionary to a DataFrame
 ensembles = pd.DataFrame(col_names)
 
+# Saves the DataFrame to a CSV file
 ensembles.to_csv('ensembles.csv')
 
-#takes like 100-110 minutes
 end_time = time.time()
 print("The time of execution of above program is :",
       (end_time-start_time)/60, "mins")

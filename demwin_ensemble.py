@@ -105,6 +105,28 @@ def mean_median(partition, dem_key, rep_key):
     # Returns the difference between the median and the mean vote share
     return median - mean
 
+
+def efficiency_gap(partition, dem_key, rep_key):
+    wasted_d = 0  # Initializes the wasted votes for Democrats
+    wasted_r = 0  # Initializes the wasted votes for Republicans
+    
+    # Loops through each district to calculate wasted votes
+    for i in range(num_dist):
+        d_votes = partition[dem_key][i + 1]
+        r_votes = partition[rep_key][i + 1]
+        total_votes = d_votes + r_votes
+        
+        # Calculate wasted votes depending on which party won the district
+        if d_votes > r_votes:
+            wasted_d += d_votes - (total_votes / 2)  # Democrats win, calculates their wasted votes
+            wasted_r += r_votes  # All Republican votes are wasted
+        else:
+            wasted_d += d_votes  # All Democrat votes are wasted
+            wasted_r += r_votes - (total_votes / 2)  # Republicans win, calculates their wasted votes
+            
+    # Calculates and return the efficiency gap, which is normalized by the total votes
+    return (wasted_r - wasted_d) / sum(partition[dem_key].values() + partition[rep_key].values())
+
 #runs the markov chain
 for part in our_random_walk:
     cutedge_ensemble.append(len(part["cut_edges"]))

@@ -84,6 +84,10 @@ our_random_walk = MarkovChain(
 cutedge_ensemble = []
 pres_demwin_ensemble = []
 sen_demwin_ensemble = []
+mean_median_diff_pres = []
+efficiency_gap_pres = []
+mean_median_diff_sen = []
+efficiency_gap_sen = []
 
 #runs the markov chain
 for part in our_random_walk:

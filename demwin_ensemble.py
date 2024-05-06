@@ -33,9 +33,6 @@ print(il_graph.nodes[0])
 #%%
 
 
-"""
-DONE: Lab 3!  See all the instructions on Canvas
-"""
 
 initial_partition = Partition(
     il_graph,
@@ -125,7 +122,8 @@ def efficiency_gap(partition, dem_key, rep_key):
             wasted_r += r_votes - (total_votes / 2)  # Republicans win, calculates their wasted votes
             
     # Calculates and return the efficiency gap, which is normalized by the total votes
-    return (wasted_r - wasted_d) / sum(partition[dem_key].values() + partition[rep_key].values())
+    return (wasted_r - wasted_d) / sum(list(partition[dem_key].values()) + list(partition[rep_key].values()))
+
 
 # Iterates over the partitions generated in the Markov chain
 for part in our_random_walk:
@@ -189,7 +187,7 @@ plt.hist(efficiency_gap_sen, align='left')
 plt.title("Efficiency Gap for Senate Election")
 plt.show()
 
-   
+
 print('CUTEDGE:')
 print(cutedge_ensemble)
 print('PRESDEMWIN:')
